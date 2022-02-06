@@ -1,0 +1,29 @@
+version: '3'
+services:
+  jenkins:
+    image: myjenkins
+    environment:
+      JAVA_OPTS: -Djenkins.install.runSetupWizard=false
+      JENKINS_OPTS: --argumentsRealm.roles.user=admin --argumentsRealm.passwd.admin=admin --argumentsRealm.roles.admin=admin --httpPort=8000
+      DOCKER_HOST: tcp://192.168.50.200:2375
+    volumes:
+      - ./jenkins_init/:/var/jenkins_home/init.groovy.d/
+      - ./loadgen_pipeline_init/:/usr/share/jenkins/ref/jobs/loadgen-pipeline/
+      - jenkins-plugins-vol:/var/jenkins_home/plugins
+    restart: always
+    user: root
+    ports:
+      - 8000:8000
+    container_name: jenkins
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    ports:
+      - 9090:9090
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus_init/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+volumes:
+  jenkins-plugins-vol:

@@ -1,0 +1,73 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.42">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.2"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.2">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.94">
+    <script>pipeline {
+    agent none
+    
+    stages {
+        stage('Build app') {
+            agent {
+                label 'master'
+            }
+            stages {
+                stage('Fresh workspace') {
+                    steps {
+                        sh 'rm -rf ./loadgen'
+                    }
+                }
+                stage('Git clone') {
+                    steps {
+                        sh 'git clone https://github.com/vnskln/loadgen.git'
+                    }
+                }
+                stage('Build app') {
+                    steps {
+                        dir('loadgen') {
+                            sh './mvnw clean package'
+                        }
+                    }
+                }
+                stage('Build image') {
+                    steps {
+                        dir('loadgen') {
+                            sh 'docker build --tag loadgen-0.0.1 .'
+                        }
+                    }
+                }
+				stage('Deploy container') {
+                    steps {
+                        dir('loadgen') {
+                            sh 'docker-compose up -d'
+                        }
+                    }
+                }
+				stage('Stop container') {
+                    steps {
+						dir('loadgen') {
+							input 'Stop containers?'
+							sh 'docker-compose rm -fsv'
+							sh 'echo y | docker system prune'
+						}
+                    }
+                }
+            }
+        }
+    }
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
