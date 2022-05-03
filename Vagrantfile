@@ -6,6 +6,8 @@ Vagrant.configure("2") do |config|
 	master.vm.synced_folder "master/", "/home/vagrant/eng/"
 	master.vm.network "private_network", ip: "192.168.50.100"
 	master.vm.network "forwarded_port", guest: 8000, host: 8000
+	master.vm.network "forwarded_port", guest: 8004, host: 8004
+	master.vm.network "forwarded_port", guest: 8005, host: 8005
 	master.vm.provider "virtualbox" do |vb|
 	  vb.gui = true
 	  vb.name = "master"
@@ -43,7 +45,6 @@ Vagrant.configure("2") do |config|
 	node.vm.network "forwarded_port", guest: 8001, host: 8001
 	node.vm.network "forwarded_port", guest: 8002, host: 8002
 	node.vm.network "forwarded_port", guest: 8003, host: 8003
-	node.vm.network "forwarded_port", guest: 8004, host: 8004
 	node.vm.provider "virtualbox" do |vb|
 	  vb.gui = true
 	  vb.name = "node"

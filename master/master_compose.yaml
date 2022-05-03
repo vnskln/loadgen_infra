@@ -20,10 +20,18 @@ services:
     container_name: prometheus
     restart: always
     ports:
-      - 9090:9090
+      - 8004:9090
     command:
       - --config.file=/etc/prometheus/prometheus.yml
     volumes:
       - ./prometheus_init/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - 8005:3000
+    volumes:
+      - ./grafana_init/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
 volumes:
   jenkins-plugins-vol:
