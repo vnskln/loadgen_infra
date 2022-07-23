@@ -40,7 +40,6 @@ Vagrant.configure("2") do |config|
   config.vm.define "node" do |node|
     node.vm.box = "ubuntu/focal64"
     node.vm.hostname = "node"
-	node.vm.synced_folder "node/", "/home/vagrant/eng/"
 	node.vm.network "private_network", ip: "192.168.50.200"
 	node.vm.network "forwarded_port", guest: 8001, host: 8001
 	node.vm.network "forwarded_port", guest: 8002, host: 8002
