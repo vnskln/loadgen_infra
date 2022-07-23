@@ -19,7 +19,7 @@
     stages {
         stage('Build app') {
             agent {
-                label 'master'
+                label 'built-in'
             }
             stages {
                 stage('Fresh workspace') {
