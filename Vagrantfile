@@ -40,6 +40,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "node" do |node|
     node.vm.box = "ubuntu/focal64"
     node.vm.hostname = "node"
+	node.vm.synced_folder "node/", "/home/vagrant/eng/"
 	node.vm.network "private_network", ip: "192.168.50.200"
 	node.vm.network "forwarded_port", guest: 8001, host: 8001
 	node.vm.network "forwarded_port", guest: 8002, host: 8002
@@ -57,6 +58,9 @@ Vagrant.configure("2") do |config|
 	# Docker
     node.vm.provision :docker
 	node.vm.provision "shell", inline: <<-SHELL
+	  sudo apt-get update
+	  sudo apt-get -y install sysstat
+	  sudo chmod a+rx /home/vagrant/eng/monitor.sh
 	  sudo sed -i 's|ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock|ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock|' /lib/systemd/system/docker.service
 	  sudo systemctl daemon-reload
 	  sudo service docker restart
