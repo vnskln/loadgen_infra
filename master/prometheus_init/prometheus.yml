@@ -4,3 +4,14 @@ scrape_configs:
     static_configs:
       - targets:
           - 192.168.50.200:8003
+  - job_name: loadGenerator
+    scrape_interval: 1s
+    static_configs:
+      - targets:
+          - 192.168.50.200:8001
+    metrics_path: "/actuator/prometheus"
+  - job_name: nodeexporter
+    scrape_interval: 1s
+    static_configs:
+      - targets:
+          - 192.168.50.200:8002

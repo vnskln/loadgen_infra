@@ -33,5 +33,8 @@ services:
       - 8005:3000
     volumes:
       - ./grafana_init/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./grafana_init/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ./grafana_init/jvm-micrometer_rev9.json:/etc/grafana/provisioning/dashboards/jvm-micrometer_rev9.json
+      - ./grafana_init/main-overview_rev1.json:/etc/grafana/provisioning/dashboards/main-overview_rev1.json
 volumes:
   jenkins-plugins-vol:
