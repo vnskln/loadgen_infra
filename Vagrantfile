@@ -17,6 +17,7 @@ Vagrant.configure("2") do |config|
 	  vb.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
 	  vb.customize ["modifyvm", :id, "--audio", "none"]
 	  vb.customize ["modifyvm", :id, "--vram", "12"]
+          vb.customize ["modifyvm", :id, "--paravirtprovider", "minimal", "--cpus", "2"]
 	end  
 	# Docker
     master.vm.provision :docker    
@@ -54,6 +55,7 @@ Vagrant.configure("2") do |config|
 	  vb.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
 	  vb.customize ["modifyvm", :id, "--audio", "none"]
 	  vb.customize ["modifyvm", :id, "--vram", "24"]
+          vb.customize ["modifyvm", :id, "--paravirtprovider", "minimal", "--cpus", "2"]
 	end	
 	# Docker
     node.vm.provision :docker
